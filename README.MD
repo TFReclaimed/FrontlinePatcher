@@ -4,7 +4,7 @@ This is a tool for patching the Titanfall: Frontline game to fix bugs and add Fr
 
 ## How to use
 
-1. Download the latest release from the [releases page](https://github.com/TFInternal/FrontlinePatcher/releases).
+1. Download the latest release from the [releases page](https://github.com/TFReclaimed/FrontlinePatcher/releases).
 2. Extract the contents of the downloaded ZIP file.
 3. Install [Apktool](https://apktool.org/docs/install) and the [Java JDK](https://adoptium.net/temurin/releases).
 4. Install [Android Studio](https://developer.android.com/studio) and the Android SDK Build-Tools from the SDK Manager.
