@@ -133,7 +133,7 @@ public class PatchCommand : AsyncCommand<PatchCommand.Settings>
             
             // Replace S3 with our own server
             new("assets/serverAddresses.json", "pc-tffl-leaderboard.s3-website-us-east-1.amazonaws.com", "prod-us-east-1-gameserver-lb.tfflinternal.com"),
-            new("assets/serverAddresses.json", "pc-tffl-html.s3-website-us-east-1.amazonaws.com", "tfflinternal.com"),
+            new("assets/serverAddresses.json", "pc-tffl-html.s3-website-us-east-1.amazonaws.com", "news.tfflinternal.com"),
             
             // Replace Nexon TOY with OpenTOY
             new("smali/kr/co/nexon/toy/api/request/NXToyRequestType.smali", "m-api.nexon.com", settings.OpenToyUrl)
