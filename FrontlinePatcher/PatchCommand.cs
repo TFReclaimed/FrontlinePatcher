@@ -42,7 +42,8 @@ public class PatchCommand : AsyncCommand<PatchCommand.Settings>
         public bool? PauseBeforeBuild { get; init; }
     }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings)
+    public override async Task<int> ExecuteAsync(CommandContext context, Settings settings,
+        CancellationToken cancellationToken)
     {
         AnsiConsole.WriteLine("TITANFALL: FRONTLINE PATCHER");
         AnsiConsole.WriteLine();
