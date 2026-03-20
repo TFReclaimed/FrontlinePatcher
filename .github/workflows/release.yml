@@ -37,10 +37,26 @@ jobs:
           --runtime win-x64
           --output ./publish-win-x64
 
+      - name: Publish for MacOS (x86)
+        run: >
+          dotnet publish FrontlinePatcher
+          --configuration Release
+          --runtime osx-x64
+          --output ./publish-osx-x64
+
+      - name: Publish for MacOS (arm64)
+        run: >
+          dotnet publish FrontlinePatcher
+          --configuration Release
+          --runtime osx-arm64
+          --output ./publish-osx-arm64
+
       - name: Package artifacts
         run: |
           zip -rj FrontlinePatcher-Linux.zip ./publish-linux-x64
           zip -rj FrontlinePatcher-Windows.zip ./publish-win-x64
+          zip -rj FrontlinePatcher-MacOS-x86.zip ./publish-osx-x64
+          zip -rj FrontlinePatcher-MacOS-arm64.zip ./publish-osx-arm64
 
       - name: Upload Linux artifact
         uses: actions/upload-artifact@v7
@@ -53,6 +69,18 @@ jobs:
         with:
           name: FrontlinePatcher-Windows.zip
           path: FrontlinePatcher-Windows.zip
+
+      - name: Upload MacOS (x86) artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: FrontlinePatcher-MacOS-x86.zip
+          path: FrontlinePatcher-MacOS-x86.zip
+
+      - name: Upload MacOS (arm64) artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: FrontlinePatcher-MacOS-arm64.zip
+          path: FrontlinePatcher-MacOS-arm64.zip
 
   release:
     runs-on: ubuntu-latest
@@ -70,6 +98,16 @@ jobs:
         with:
           name: FrontlinePatcher-Windows.zip
 
+      - name: Download MacOS (x86) artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: FrontlinePatcher-MacOS-x86.zip
+
+      - name: Download MacOS (arm64) artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: FrontlinePatcher-MacOS-arm64.zip
+
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
@@ -77,3 +115,5 @@ jobs:
           files: |
             FrontlinePatcher-Linux.zip
             FrontlinePatcher-Windows.zip
+            FrontlinePatcher-MacOS-x86.zip
+            FrontlinePatcher-MacOS-arm64.zip
