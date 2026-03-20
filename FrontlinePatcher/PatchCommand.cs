@@ -136,7 +136,10 @@ public class PatchCommand : AsyncCommand<PatchCommand.Settings>
             new("assets/serverAddresses.json", "pc-tffl-html.s3-website-us-east-1.amazonaws.com", "news.tfflinternal.com"),
             
             // Replace Nexon TOY with OpenTOY
-            new("smali/kr/co/nexon/toy/api/request/NXToyRequestType.smali", "m-api.nexon.com", settings.OpenToyUrl)
+            new("smali/kr/co/nexon/toy/api/request/NXToyRequestType.smali", "m-api.nexon.com", settings.OpenToyUrl),
+
+            // Remove scary permissions
+            new("AndroidManifest.xml", """^[ \t]*<uses-permission android:name="(?:\.|android\.permission\.)?(GET_ACCOUNTS|READ_CONTACTS|READ_PHONE_STATE|GET_TASKS)"\s*\/>.*$""", string.Empty)
         };
         
         if (settings.FrontlineUrl is not null)
