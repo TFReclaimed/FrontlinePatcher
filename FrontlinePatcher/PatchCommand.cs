@@ -97,6 +97,7 @@ public class PatchCommand : AsyncCommand<PatchCommand.Settings>
         var patcher = new AssemblyPatcher(assemblyPath);
         patcher.AddPatch(new GameDebugLogPatch());
         patcher.AddPatch(new StorePurchasePatch());
+        patcher.AddPatch(new EmailLoginTimeoutPatch());
 
         var patchResult = AnsiConsole.Status().Start("Loading assembly...", ctx =>
         {
