@@ -48,7 +48,7 @@ index df65a07f..1e65d23e 100644
 -		CrashReporting.Init("fd1f4b60-2c24-415e-b8d8-dd633c752c22", text2, userID);
  	}
 diff --git a/Assets/Scripts/Assembly-CSharp/PvE/PvEMissionsTemplateParser.cs b/Assets/Scripts/Assembly-CSharp/PvE/PvEMissionsTemplateParser.cs
-index 3c92b0da..bc7e272a 100644
+index 3c92b0da..5423d071 100644
 --- a/Assets/Scripts/Assembly-CSharp/PvE/PvEMissionsTemplateParser.cs
 +++ b/Assets/Scripts/Assembly-CSharp/PvE/PvEMissionsTemplateParser.cs
 @@ -93,4 +93,6 @@ namespace PvE
@@ -66,6 +66,14 @@ index 3c92b0da..bc7e272a 100644
 +			string hash = string.Empty;
 +#endif
  			OperationGetMissionData httpOperation = new OperationGetMissionData(hash);
+@@ -150,2 +156,3 @@ namespace PvE
+ 			_hasMissionDateToParse = false;
++#if !UNITY_WEBGL
+ 			_Me.JSON = PlayerPrefs.GetString("PvETemplateData", string.Empty);
+@@ -154,2 +161,3 @@ namespace PvE
+ 			PvEClientManager.StartPvECoroutine(_Me.ParseTemplateData(pages));
++#endif
+ 			yield return null;
 diff --git a/Assets/Scripts/Assembly-CSharp/SimpleDiskUtils/DiskUtils.cs b/Assets/Scripts/Assembly-CSharp/SimpleDiskUtils/DiskUtils.cs
 index b20d3baf..fbbd256e 100644
 --- a/Assets/Scripts/Assembly-CSharp/SimpleDiskUtils/DiskUtils.cs
