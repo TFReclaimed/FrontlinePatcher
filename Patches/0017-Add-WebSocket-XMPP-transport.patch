@@ -16,12 +16,62 @@ index f32caf9f..05495792 100644
  				conf.UseSocketTransport();
 +#endif
  			});
+diff --git a/Assets/Scripts/Assembly-CSharp/WebGlThreadPoolPumper.cs b/Assets/Scripts/Assembly-CSharp/WebGlThreadPoolPumper.cs
+new file mode 100644
+index 00000000..555f198a
+--- /dev/null
++++ b/Assets/Scripts/Assembly-CSharp/WebGlThreadPoolPumper.cs
+@@ -0,0 +1,33 @@
++#if UNITY_WEBGL
++using System;
++using System.Reflection;
++using System.Threading;
++using UnityEngine;
++
++// https://github.com/VolodymyrBS/WebGLThreadingPatcher/issues/3
++public static class WebGlThreadPoolPumper
++{
++    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
++    private static void StartPumping()
++    {
++        if (Application.isEditor)
++        {
++            return;
++        }
++
++        var dispatchMethod = Type
++            .GetType("System.Threading.ThreadPoolWorkQueue")?
++            .GetMethod("Dispatch", BindingFlags.NonPublic | BindingFlags.Static)?
++            .CreateDelegate(typeof(Func<bool>)) as Func<bool>;
++
++        Pump(dispatchMethod);
++    }
++
++    private static void Pump(object dispatchMethod)
++    {
++        var method = (Func<bool>) dispatchMethod;
++        var didFinishWork = method();
++        SynchronizationContext.Current.Post(Pump, dispatchMethod);
++    }
++}
++#endif
+\ No newline at end of file
+diff --git a/Assets/Scripts/Assembly-CSharp/WebGlThreadPoolPumper.cs.meta b/Assets/Scripts/Assembly-CSharp/WebGlThreadPoolPumper.cs.meta
+new file mode 100644
+index 00000000..ed80267d
+--- /dev/null
++++ b/Assets/Scripts/Assembly-CSharp/WebGlThreadPoolPumper.cs.meta
+@@ -0,0 +1,3 @@
++fileFormatVersion: 2
++guid: 4b03f70857004814a24573081b116845
++timeCreated: 1780419105
+\ No newline at end of file
 diff --git a/Assets/Scripts/Assembly-CSharp/XmppWebSocketTransport.cs b/Assets/Scripts/Assembly-CSharp/XmppWebSocketTransport.cs
 new file mode 100644
-index 00000000..e3baaf7c
+index 00000000..9cab6b5e
 --- /dev/null
 +++ b/Assets/Scripts/Assembly-CSharp/XmppWebSocketTransport.cs
-@@ -0,0 +1,149 @@
+@@ -0,0 +1,155 @@
 +#if UNITY_WEBGL
 +using System;
 +using System.Reactive.Subjects;
@@ -59,7 +109,13 @@ index 00000000..e3baaf7c
 +    {
 +        var tcs = new TaskCompletionSource<bool>();
 +
-+        _webSocket = new WebSocket("ws://127.0.0.1:10000/chat", "xmpp");
++        var url = $"ws://{xmppDomain}/chat";
++        if (xmppDomain == "prod-us-east-1-chat-lb.tfflinternal.com")
++        {
++            url = "wss://prod-us-east-1-gameserver-lb.tfflinternal.com/chat";
++        }
++
++        _webSocket = new WebSocket(url, "xmpp");
 +        _webSocket.OnOpen += OnOpen;
 +        _webSocket.OnOpen += () => tcs.TrySetResult(true);
 +        _webSocket.OnError += OnError;
